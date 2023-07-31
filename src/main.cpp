@@ -1,18 +1,20 @@
 #include <iostream>
 #include <cmath>
+#include <memory>
 #include "network.h"
 
 int main() {
-    Network myNetwork;
 
     // Adding inputs to the network
     float inputValue1 = 1;
     std::shared_ptr<float> input1 = std::make_shared<float>(inputValue1);
-    myNetwork.addInput(std::move(input1));
+    std::vector<std::shared_ptr<float>> inputs = {input1};
 
-    // Calculating the network's outputs
+    Network myNetwork;
+    for ( std::shared_ptr<float> input : inputs){
+        myNetwork.addInput(input);
+    }
     myNetwork.Initialize();
-    myNetwork.calculateNetwork();
 
     // Getting the outputs
     std::vector<float> outputs = myNetwork.getOutputs();

@@ -11,4 +11,5 @@ add_executable(NEATAlgorithm
     src/main.cpp
     src/node.cpp
     src/network.cpp
+    src/network_creator.cpp
 )

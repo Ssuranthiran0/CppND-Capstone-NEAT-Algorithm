@@ -6,13 +6,13 @@
 #include <vector> // std::vector 
 
 void Network::Initialize(){
-    for(int i=0; i<_inputs; i++){
-        _startNodes.emplace_back(std::move(inputs[i]), i); // emplace back calls the constructor of vector's type
+    for(int i=0; i<_inputs.size(); i++){
+        _startNodes.emplace_back(std::move(_inputs[i]), i); // emplace back calls the constructor of vector's type
     }
-    for(int i=0; i<_hiddenLayers; i++){
+    for(int i=0; i<_defaultHiddenLayers; i++){
         std::vector<Node> layer;
-        for(int j=0; j<_nodesPerLayer; j++){
-            layer.emplace_back(_defaultWeight, _defaultBias, i+1, j);
+        for(int j=0; j<_defaultNodesPerLayer; j++){
+            layer.emplace_back(_defaultWeight, _defaultBias, i, j);
         }
         _nodes.emplace_back(layer);
     }
@@ -20,13 +20,66 @@ void Network::Initialize(){
         _outputNodes.emplace_back(i);
     }
 }
-Network::Network(){}
-Network::Network(std::vector<float>& inpts){
+Network::Network(){} // Blank
 
+
+//// Ro5
+Network::~Network(){/*Smart Ptr So No Deallocation Needed*/}
+
+Network::Network(const Network &source, bool mutate){ // copy constructor | copy existing network + mutate if wanted
+    // must make deep copy because it is ptr (shared but still)
+    _inputs.clear(); // MUST create new inputs MANUALLY. 
+    // these are all just variable so they dont need to be 
+    _nodes = source._nodes;
+    _startNodes = source._startNodes;
+    _outputNodes = source._outputNodes;
 }
-Network::~Network(){
-    // Smart Ptr Overrides
+
+Network& Network::operator=(const Network &source){ // copy assignment op
+    if(this == &source){
+        return *this; // dont copy from this into this
+    }
+    // rest (besides return) is same as copy ctor
+    _inputs.clear(); // MUST create new inputs MANUALLY. 
+    _nodes = source._nodes;
+    _startNodes = source._startNodes;
+    _outputNodes = source._outputNodes;
+    // return ref to this
+    return *this;
+} 
+
+Network::Network(Network &&source){ // move constructor
+    _inputs = std::move(source._inputs); // actually im treating _inputs as a unique ptr vector so i could change it, but then i have to change it everywhere so idk
+    _nodes = std::move(source._nodes);
+    _startNodes = std::move(source._startNodes);
+    _outputNodes = std::move(source._outputNodes);
+
+    // clear all source vectors || no need to invalidate all input ptrs since it is shared ptr
+    source._inputs.clear();
+    source._nodes.clear();
+    source._startNodes.clear();
+    source._outputNodes.clear();
 }
+
+Network& Network::operator=(Network &&source){ // move assignment op
+    if(this == &source){
+        return *this; // dont move from self into self
+    }
+    // move ctor
+    _inputs = std::move(source._inputs); // actually im treating _inputs as a unique ptr vector so i could change it, but then i have to change it everywhere so idk
+    _nodes = std::move(source._nodes);
+    _startNodes = std::move(source._startNodes);
+    _outputNodes = std::move(source._outputNodes);
+
+    // clear all source vectors || no need to invalidate all input ptrs since it is shared ptr
+    source._inputs.clear();
+    source._nodes.clear();
+    source._startNodes.clear();
+    source._outputNodes.clear();
+
+    return *this;
+}
+//// EOF Ro5
 
 
 template <typename T, typename P> 
@@ -39,10 +92,13 @@ void connect(std::vector<T> &first, std::vector<P> &second){
 }
 
 void Network::addInput(std::shared_ptr<float> input){
-    inputs.emplace_back(std::move(input));
+    _inputs.emplace_back(std::move(input));
+}
+void Network::addOutput(){
+    _outputs += 1; // init after obviously (not here, but where this is called)
 }
 void Network::printStructure(){
-
+    
 }
 void Network::addConnections(std::vector<StartNode> &inputs, std::vector<std::vector<Node>> &nodes, std::vector<OutputNode> &outputs){}
 void Network::calculateNetwork(){
@@ -69,6 +125,7 @@ void Network::calculateNetwork(){
     }
 }
 std::vector<float> Network::getOutputs(){
+    calculateNetwork();
     std::vector<float> outputs;
     outputs.reserve(_outputs);
     for (int i = 0; i < _outputs; i++) {

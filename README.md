@@ -1,10 +1,14 @@
-# CPPND: Capstone Hello World Repo
+# CPPND: Capstone Project Repo
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
+This is my capstone project for the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
 
-The Capstone Project gives you a chance to integrate what you've learned throughout this program. This project will become an important part of your portfolio to share with current and future colleagues and employers.
+Cloned from https://github.com/Udacity/CppND-Capstone-Hello-World starter code provided by Udacity.
 
-In this project, you can build your own C++ application starting with this repo, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
+## Overview of Project
+For this project, I have chosen to implement a basic neural network using a modified version of the NEAT algorithm. The NEAT (NeuroEvolution of Augmenting Topologies) algorithm is an algorithm for generating a neural network. Each network consists of nodes, which are separated into different layers, and connections between the nodes. When training, each 'generation' is tested for the problem trying to be solved, and gets assigned a score based on the network's performance. At the beginning of the next generation, all but the best performing generation get removed, and, along with the best performing network of the previous generation, a fixed amount of copies are made of that network. These copies, however, have slight mutations, such as changing the properties of specific nodes, adding new connections between nodes, and even adding more nodes. Eventually, as more and more generations are simulated, the network will get better and better at solving the problem that was being trained for, even if it had not been directly what the problem even was, through the process of natural selection!
+
+For this project, the problem that I have chosen to solve is trying to predict a mathematical equation (ex. y=sinx).
+
 
 ## Dependencies for Running Locally
 * cmake >= 3.7
@@ -16,11 +20,11 @@ In this project, you can build your own C++ application starting with this repo,
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
+  * Windows: recommend using [MinGW](http://www.mingw-w64.org/)
 
 ## Basic Build Instructions
 
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./HelloWorld`.
+4. Run it: `./NEATAlgorithm`.

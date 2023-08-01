@@ -5,6 +5,8 @@
 #include <memory>
 #include "node.h"
 
+// NOTE : Network class is meant to be used with creator. if u want to play around with this (when reviewing maybe) then just make a creator instance.
+
 class Network{
     public:
         Network(); // regular constructor | create blank network
@@ -20,12 +22,15 @@ class Network{
 
         void Initialize();
         void addInput(std::shared_ptr<float> input); // add an input variable
-        void addOutput(); // add an output node
+        void addOutput(int num=1); // add an output node
         template <typename T, typename P> void connect(std::vector<T> &first, std::vector<P> &second); // connect all elements of first to second
         void addConnections(std::vector<StartNode> &inputs, std::vector<std::vector<Node>> &nodes, std::vector<OutputNode> &outputs); // add connections
         void printStructure(); // print whole network structure
         std::vector<float> getOutputs(); // get the final outputs
     private:
+        void addHiddenNode(int layer);
+
+
         void calculateNetwork(); // self explanatory
         const float _mutationChance = 0.1; // this value divided by score. if it is good, dont change it
         const float _defaultWeight = 1; // starting weight
@@ -33,7 +38,7 @@ class Network{
         const float _initConnectionChance = 0.3; // chance of creating connection at inititialization for each node
         const int _defaultHiddenLayers = 2; // number of hidden layers
         const int _defaultNodesPerLayer = 3; // number of nodes in each hidden layer
-        int _outputs = 1; // output amount
+        int _outputs = 0; // output amount | 
         std::vector<std::shared_ptr<float>> _inputs;
         std::vector<std::vector<Node>> _nodes;
         std::vector<StartNode> _startNodes;

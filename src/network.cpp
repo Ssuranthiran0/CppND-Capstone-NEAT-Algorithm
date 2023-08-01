@@ -24,7 +24,7 @@ Network::Network(){} // Blank
 
 
 //// Ro5
-Network::~Network(){/*Smart Ptr So No Deallocation Needed*/}
+Network::~Network(){}/* Smart Ptr So No Deallocation Needed */
 
 Network::Network(const Network &source, bool mutate){ // copy constructor | copy existing network + mutate if wanted
     // must make deep copy because it is ptr (shared but still)
@@ -81,6 +81,10 @@ Network& Network::operator=(Network &&source){ // move assignment op
 }
 //// EOF Ro5
 
+void Network::addHiddenNode(int layerIndex){
+    std::vector<Node> &currentLayer = _nodes[layerIndex];
+    currentLayer.emplace_back();
+}
 
 template <typename T, typename P> 
 void connect(std::vector<T> &first, std::vector<P> &second){
@@ -94,11 +98,15 @@ void connect(std::vector<T> &first, std::vector<P> &second){
 void Network::addInput(std::shared_ptr<float> input){
     _inputs.emplace_back(std::move(input));
 }
-void Network::addOutput(){
-    _outputs += 1; // init after obviously (not here, but where this is called)
+void Network::addOutput(int num){
+    _outputs += num; // init after obviously (not here, but where this is called)
 }
 void Network::printStructure(){
-    
+    int nodeCount;
+    for (auto layer : _nodes){
+        nodeCount += layer.size();
+   }
+   std::cout << "Start: " << _startNodes.size() << " | Hidden Nodes: " << nodeCount << " | Outputs: " << _outputNodes.size() << std::endl;
 }
 void Network::addConnections(std::vector<StartNode> &inputs, std::vector<std::vector<Node>> &nodes, std::vector<OutputNode> &outputs){}
 void Network::calculateNetwork(){
@@ -127,9 +135,8 @@ void Network::calculateNetwork(){
 std::vector<float> Network::getOutputs(){
     calculateNetwork();
     std::vector<float> outputs;
-    outputs.reserve(_outputs);
-    for (int i = 0; i < _outputs; i++) {
-        outputs.push_back(_outputNodes[i].getVal());
+    for (OutputNode &oNode : _outputNodes) {
+        outputs.push_back(oNode.getVal());
     }
     return outputs;
 }

@@ -2,27 +2,23 @@
 #include <cmath>
 #include <memory>
 #include "network.h"
+#include "network_creator.h"
 
 int main() {
 
     // Adding inputs to the network
+    Creator creator;
     float inputValue1 = 1;
-    std::shared_ptr<float> input1 = std::make_shared<float>(inputValue1);
-    std::vector<std::shared_ptr<float>> inputs = {input1};
+    creator.createNetwork(inputValue1);
+    if(creator.getNetworks().size() != 0){ // only do it if creation worked
 
-    Network myNetwork;
-    for ( std::shared_ptr<float> input : inputs){
-        myNetwork.addInput(input);
+        // Getting the outputs
+        std::vector<float> outputs = creator.getOutput(0); // default to first network stored
+
+        // Printing the outputs
+        for (float output : outputs) {
+            std::cout << "Output: " << output << std::endl;
+        }
     }
-    myNetwork.Initialize();
-
-    // Getting the outputs
-    std::vector<float> outputs = myNetwork.getOutputs();
-
-    // Printing the outputs
-    for (float output : outputs) {
-        std::cout << "Output: " << output << std::endl;
-    }
-
     return 0;
 }

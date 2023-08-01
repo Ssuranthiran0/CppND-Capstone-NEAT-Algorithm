@@ -39,6 +39,7 @@ class Network{
         const int _defaultHiddenLayers = 2; // number of hidden layers
         const int _defaultNodesPerLayer = 3; // number of nodes in each hidden layer
         int _outputs = 0; // output amount | 
+        int id{0}; // id, just for debuggin
         std::vector<std::shared_ptr<float>> _inputs;
         std::vector<std::vector<Node>> _nodes;
         std::vector<StartNode> _startNodes;

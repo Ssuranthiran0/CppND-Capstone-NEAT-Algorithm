@@ -15,21 +15,21 @@ Node::Node(float weight, float bias, int layer, int pos){
 
 float Node::getVal(){
     calculateValues(); // calculate all values
-    std::cout << "Getting value: " << _value; printLocation(); // debugging
+    //std::cout << "Getting value: " << _value; printLocation(); // debugging
     return _value;
 }
 
 void Node::printLocation(){
-    std::cout << " | Layer: " << currentLayer << " Pos: " << positionInLayer << std::endl; // print location of this node in the model
+    //std::cout << " | Layer: " << currentLayer << " Pos: " << positionInLayer << std::endl; // print location of this node in the model
 }
 
 void Node::clearValues(){
-    std::cout << "Clearing "; printLocation(); // debugging
+    //std::cout << "Clearing "; printLocation(); // debugging
     _values.clear(); // clear vector
 }
 
 void Node::addValue(float val) {
-    std::cout << "Adding value: " << val; printLocation(); //debugging
+    //std::cout << "Adding value: " << val; printLocation(); //debugging
     _values.emplace_back(val); // add val to the vector
 }
 

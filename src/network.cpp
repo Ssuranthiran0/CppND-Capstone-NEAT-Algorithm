@@ -5,6 +5,8 @@
 #include <random> // random generation
 #include <vector> // std::vector 
 
+
+
 void Network::Initialize(){
     for(int i=0; i<_inputs.size(); i++){
         _startNodes.emplace_back(std::move(_inputs[i]), i); // emplace back calls the constructor of vector's type
@@ -20,6 +22,7 @@ void Network::Initialize(){
         _outputNodes.emplace_back(i);
     }
 }
+
 Network::Network(){} // Blank
 
 
@@ -81,6 +84,7 @@ Network& Network::operator=(Network &&source){ // move assignment op
 }
 //// EOF Ro5
 
+
 void Network::addHiddenNode(int layerIndex){
     std::vector<Node> &currentLayer = _nodes[layerIndex];
     currentLayer.emplace_back();
@@ -102,7 +106,7 @@ void Network::addOutput(int num){
     _outputs += num; // init after obviously (not here, but where this is called)
 }
 void Network::printStructure(){
-    int nodeCount;
+    int nodeCount{0}; // for some reason it auto initializes to like 20k. really odd.
     for (auto layer : _nodes){
         nodeCount += layer.size();
    }
@@ -139,4 +143,4 @@ std::vector<float> Network::getOutputs(){
         outputs.push_back(oNode.getVal());
     }
     return outputs;
-}
+}   

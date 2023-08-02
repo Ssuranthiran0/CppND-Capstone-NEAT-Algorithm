@@ -43,14 +43,11 @@ std::function<float(float)> getFunction(std::string text){
     return nullptr;
 }
 
-
-
-int main(){
-
+std::vector<std::vector<float>> generateDataWithInput(){
     std::string functionString;
     std::function<float(float)> functionToBePlotted;
     while(true){
-        std::cout << "Enter a function to be plotted/trained. Note, plotting just connect points, so some 'step' functions, like ceil and floor, will show as being a line. Accepted functions (sin, cos, tan, log, ln, sqrt, exp, abs, floor, ceil): ";
+        std::cout << "Enter a function to be plotted/trained. Note, plotting just connect points, so some 'step' functions, like ceil and floor, will show as being a line. Accepted functions (sin, cos, tan, log (ln), sqrt, exp, abs, floor, ceil): ";
         std::cin >> functionString;
         functionToBePlotted = getFunction(functionString);
         if(functionToBePlotted == nullptr){
@@ -68,17 +65,15 @@ int main(){
     std::cin >> end;
     std::cout << "Enter the step (e.g., 0.1). Note, extremely low values for this, in relation to start and end values, increase load times exponentially: ";
     std::cin >> step;
-    if(end == 0){
-        end = 50;
-    }
-    if(step == 0){
-        step = 0.2;
-    }
+
 
     // Adding inputs to the network
-    Plotter p;
-    std::vector<std::vector<float>> data = Plotter::generatePoints(functionToBePlotted, start, end, step);
-    std::thread t(&Plotter::plot, &p, data);
+    return Plotter::generatePoints(functionToBePlotted, start, end, step);
+}
+
+int main(){
+
+    std::thread t(&Plotter::plot, Plotter(), generateDataWithInput());
     /*
     Creator creator;
     std::vector<float> inputValues = {3,5,6,8,20};
@@ -96,6 +91,7 @@ int main(){
             }
         }
     }*/
-    t.join();
+    
+    t.join(); // wait for thread to terminate (wait for user to close the plotting window)
     return 0;
 }   

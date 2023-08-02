@@ -1,14 +1,85 @@
+#include <any>
+#include <functional>
 #include <iostream>
 #include <cmath>
 #include <memory>
 #include <fstream>
+#include <stdexcept>
+#include <string>
+#include <thread>
 
 #include "network_creator.h"
+#include "node.h"
 #include "plotter.h"
+
+std::function<float(float)> getFunction(std::string text){
+    if(text == "sin"){
+        return sin;
+    }
+    if(text == "cos"){
+        return cos;
+    }
+    if (text == "tan") {
+        return tan;
+    }
+    if (text == "log" || text == "ln") {
+        return log;
+    }
+    if (text == "sqrt") {
+        return sqrt;
+    }
+    if (text == "exp") {
+        return exp;
+    }
+    if (text == "abs") {
+        return fabs;
+    }
+    if (text == "floor") {
+        return floor;
+    }
+    if (text == "ceil") {
+        return ceil;
+    }
+    return nullptr;
+}
+
 
 
 int main(){
+
+    std::string functionString;
+    std::function<float(float)> functionToBePlotted;
+    while(true){
+        std::cout << "Enter a function to be plotted/trained. Note, plotting just connect points, so some 'step' functions, like ceil and floor, will show as being a line. Accepted functions (sin, cos, tan, log, ln, sqrt, exp, abs, floor, ceil): ";
+        std::cin >> functionString;
+        functionToBePlotted = getFunction(functionString);
+        if(functionToBePlotted == nullptr){
+            std::cout << "Invalid function. Try again.\n";
+        }else{
+            break;
+        }
+    }
+    float start{0};
+    float end{0};
+    float step{0};
+    std::cout << "Enter the start value (e.g., 0.0): ";
+    std::cin >> start;
+    std::cout << "Enter the end value (e.g., 5.0): ";
+    std::cin >> end;
+    std::cout << "Enter the step (e.g., 0.1). Note, extremely low values for this, in relation to start and end values, increase load times exponentially: ";
+    std::cin >> step;
+    if(end == 0){
+        end = 50;
+    }
+    if(step == 0){
+        step = 0.2;
+    }
+
     // Adding inputs to the network
+    Plotter p;
+    std::vector<std::vector<float>> data = Plotter::generatePoints(functionToBePlotted, start, end, step);
+    std::thread t(&Plotter::plot, &p, data);
+    /*
     Creator creator;
     std::vector<float> inputValues = {3,5,6,8,20};
     creator.createNetworks(inputValues);
@@ -24,6 +95,7 @@ int main(){
                 std::cout << "Output: " << outputs[i][j] << std::endl;
             }
         }
-    }
+    }*/
+    t.join();
     return 0;
 }   

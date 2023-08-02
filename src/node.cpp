@@ -5,13 +5,12 @@
 
 
 // Node Class Implementation
-Node::Node(float weight, float bias, int layer, int pos){
-    // initialize all
-    _weight = weight;
-    _bias = bias;
-    currentLayer = layer;
-    positionInLayer = pos;
-}
+Node::Node(float weight, float bias, int layer, int pos): 
+            _weight(weight), 
+            _bias(bias), 
+            currentLayer(layer), 
+            positionInLayer(pos)
+{}
 
 float Node::getVal(){
     calculateValues(); // calculate all values

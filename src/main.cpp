@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cmath>
 #include <memory>
-#include "network.h"
+#include <fstream>
+
 #include "network_creator.h"
+#include "plotter.h"
 
-int main() {
 
+int main(){
     // Adding inputs to the network
     Creator creator;
     std::vector<float> inputValues = {3,5,6,8,20};
@@ -24,4 +26,4 @@ int main() {
         }
     }
     return 0;
-}
+}   

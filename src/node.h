@@ -10,7 +10,11 @@ class Node {
         void addValue(float val); // add a value to the "queue" of values to be calculated
         void giveValues(); // give values to all connections
         void clearValues(); // clear
+
+        /// VIRTUAL
         virtual float getVal(); // calculate and return value
+        ///
+
         std::vector<std::shared_ptr<Node>> getConnections(); // getter for _connections
         void addConnection(std::shared_ptr<Node> node); // connect to ptr of node
         std::vector<float> _values; // values to calculate
@@ -19,7 +23,11 @@ class Node {
     protected:
         void calculateValues(); // calculate everything. getval uses this so this can be private/protected
         std::vector<std::shared_ptr<Node>> _connections; // shared_ptr to allow copying 
+
+        /// VIRTUAL
         virtual void printLocation();
+        ///
+
         // take linear value (after calculation from sum(inputs) * weight, and introduce some nonlinearity)
         float _weight{1.0}; // multiply input by weight
         float _value;

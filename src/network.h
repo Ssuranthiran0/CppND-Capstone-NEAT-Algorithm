@@ -23,7 +23,14 @@ class Network{
         void Initialize();
         void addInput(std::shared_ptr<float> input); // add an input variable
         void addOutput(int num=1); // add an output node
+
+
+        //// TEMPLATE
         template <typename T, typename P> void connect(std::vector<T> &first, std::vector<P> &second); // connect all elements of first to second
+        template <typename T, typename P> void connect(T &first, P &second); 
+        ////
+
+
         void addConnections(std::vector<StartNode> &inputs, std::vector<std::vector<Node>> &nodes, std::vector<OutputNode> &outputs); // add connections
         void printStructure(); // print whole network structure
         std::vector<float> getOutputs(); // get the final outputs

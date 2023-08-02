@@ -29,13 +29,13 @@ Network::Network(){} // Blank
 //// Ro5
 Network::~Network(){}/* Smart Ptr So No Deallocation Needed */
 
-Network::Network(const Network &source, bool mutate){ // copy constructor | copy existing network + mutate if wanted
+Network::Network(const Network &source, bool mutate) : 
+            _nodes(source._nodes), 
+            _startNodes(source._startNodes), 
+            _outputNodes(source._outputNodes)
+{
     // must make deep copy because it is ptr (shared but still)
     _inputs.clear(); // MUST create new inputs MANUALLY. 
-    // these are all just variable so they dont need to be 
-    _nodes = source._nodes;
-    _startNodes = source._startNodes;
-    _outputNodes = source._outputNodes;
 }
 
 Network& Network::operator=(const Network &source){ // copy assignment op
@@ -51,11 +51,12 @@ Network& Network::operator=(const Network &source){ // copy assignment op
     return *this;
 } 
 
-Network::Network(Network &&source){ // move constructor
-    _inputs = std::move(source._inputs); // actually im treating _inputs as a unique ptr vector so i could change it, but then i have to change it everywhere so idk
-    _nodes = std::move(source._nodes);
-    _startNodes = std::move(source._startNodes);
-    _outputNodes = std::move(source._outputNodes);
+Network::Network(Network &&source) : 
+            _nodes(std::move(source._nodes)),
+            _startNodes(std::move(source._startNodes)),
+            _inputs(std::move(source._inputs)),
+            _outputNodes(std::move(source._outputNodes))
+{
 
     // clear all source vectors || no need to invalidate all input ptrs since it is shared ptr
     source._inputs.clear();
@@ -92,11 +93,11 @@ void Network::addHiddenNode(int layerIndex){
 
 template <typename T, typename P> 
 void connect(std::vector<T> &first, std::vector<P> &second){
-    for(T &src : first){
-        for(P &target : second){
-            src.addConnection(std::make_shared<Node>(target));
-        }
-    }
+    
+}
+template <typename T, typename P> 
+void connect(T &first, P &second){
+    first.connect(std::make_shared<P>(second));
 }
 
 void Network::addInput(std::shared_ptr<float> input){
